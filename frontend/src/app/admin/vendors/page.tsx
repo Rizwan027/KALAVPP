@@ -21,7 +21,7 @@ export default function AdminVendorsPage() {
       return;
     }
 
-    if (user?.role !== 'ADMIN') {
+    if (user?.role !== 'admin') {
       toast.error('Access denied');
       router.push('/');
       return;

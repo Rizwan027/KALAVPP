@@ -28,7 +28,7 @@ export default function AdminDashboardPage() {
       return;
     }
 
-    if (user?.role !== 'ADMIN') {
+    if (user?.role !== 'admin') {
       toast.error('Access denied. Admin access required.');
       router.push('/');
       return;
