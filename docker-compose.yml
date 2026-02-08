@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: kalavpp-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: kalavpp
+      POSTGRES_PASSWORD: kalavpp_dev_password
+      POSTGRES_DB: kalavpp_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - kalavpp-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: kalavpp-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - kalavpp-network
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: kalavpp-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: development
+      PORT: 5000
+      DATABASE_URL: postgresql://kalavpp:kalavpp_dev_password@postgres:5432/kalavpp_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: development-secret-change-in-production
+      JWT_REFRESH_SECRET: development-refresh-secret-change-in-production
+      CORS_ORIGIN: http://localhost:3000
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - kalavpp-network
+    command: npm run dev
+
+  # Frontend (Next.js)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: kalavpp-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:5000/api/v1
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - kalavpp-network
+    command: npm run dev
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  kalavpp-network:
+    driver: bridge
