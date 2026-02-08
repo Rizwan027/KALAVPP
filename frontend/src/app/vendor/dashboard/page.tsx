@@ -64,7 +64,7 @@ export default function VendorDashboardPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Vendor Dashboard</h1>
-          <p className="text-gray-600">Welcome back, {user?.name}!</p>
+          <p className="text-gray-600">Welcome back, {user?.firstName || user?.email}!</p>
         </div>
 
         {/* Stats Grid */}
