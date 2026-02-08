@@ -22,7 +22,7 @@ export default function VendorEarningsPage() {
       return;
     }
 
-    if (user?.role !== 'VENDOR' && user?.role !== 'ADMIN') {
+    if (user?.role !== 'vendor' && user?.role !== 'admin') {
       toast.error('Access denied');
       router.push('/');
       return;
