@@ -28,7 +28,7 @@ export default function VendorDashboardPage() {
       return;
     }
 
-    if (user?.role !== 'VENDOR' && user?.role !== 'ADMIN') {
+    if (user?.role !== 'vendor' && user?.role !== 'admin') {
       toast.error('Access denied. Vendor access required.');
       router.push('/');
       return;
