@@ -6,6 +6,10 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  // Fix for build trace collection error
+  experimental: {
+    outputFileTracingIgnores: ['**/.git/**', '**/node_modules/**'],
+  },
   images: {
     domains: [
       'localhost',
