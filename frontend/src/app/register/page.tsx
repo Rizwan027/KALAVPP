@@ -66,7 +66,7 @@ export default function RegisterPage() {
         
         // Redirect based on role
         if (response.data.user.role === 'vendor') {
-          toast.info('Your vendor account is pending approval');
+          toast.success('Your vendor account is pending approval');
           router.push('/vendor/pending');
         } else {
           router.push('/');
