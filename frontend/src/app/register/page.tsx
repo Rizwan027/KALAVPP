@@ -49,7 +49,10 @@ export default function RegisterPage() {
       setIsLoading(true);
       try {
         const { confirmPassword, ...registerData } = values;
-        const response = await authApi.register(registerData);
+        const response = await authApi.register({
+          ...registerData,
+          role: registerData.role as 'customer' | 'vendor',
+        });
         
         dispatch(
           setCredentials({
